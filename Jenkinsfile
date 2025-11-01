@@ -2,10 +2,6 @@ pipeline {
     agent any
 
     environment {
-        VENV = '.venv'
-        PYTHON = '${VENV}/bin/python'
-        PYTEST = '${VENV}/bin/pytest'
-        LOCUST = '${VENV}/bin/locust'
         OBMC_HOST='https://127.0.0.1:2443'
         IPMI_HOST='127.0.0.1'
         IPMI_PORT='2623'
@@ -34,9 +30,10 @@ pipeline {
             steps {
                 sh '''
                     mkdir -p reports
-                    python3 -m venv ${VENV}
-                    ${VENV}/bin/pip install --upgrade pip
-                    ${VENV}/bin/pip install -r requirements.txt
+                    python3 -m venv .venv
+                    source ./.venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
                 '''
             }
         }
@@ -56,7 +53,7 @@ pipeline {
 
         stage('Run OpenBMC API Tests') {
             steps {
-                sh "ls; ${PYTEST} tests/api/ -v --junitxml=./reports/pytest.xml --disable-warnings"
+                sh "pytest tests/api/ -v --junitxml=./reports/pytest.xml --disable-warnings"
             }
             post {
                 always {
@@ -79,7 +76,7 @@ pipeline {
 
         // stage('Run OpenBMC WebUI Tests') {
         //     steps {
-        //         sh "${PYTHON} tests/webui/webui-tests.py"
+        //         sh "python tests/webui/webui-tests.py"
         //     }
         // }
 
@@ -87,7 +84,7 @@ pipeline {
             steps {
                 sh """
                     mkdir -p reports/locust
-                    ${LOCUST} -f tests/locust/locustfile.py \\
+                    locust -f tests/locust/locustfile.py \\
                         --headless \\
                         -u 50 \\
                         -r 2 \\
