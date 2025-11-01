@@ -21,7 +21,7 @@ pipeline {
         stage('Install Qemu') {
             steps {
                 sh '''
-                    apt-get install -y --update python3 qemu-utils qemu-system-arm python3.13-venv ipmitool
+                    apt-get install -y --update python3 qemu-utils qemu-system-arm python3.13-venv ipmitool wget
                 '''
             }
         }
