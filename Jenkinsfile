@@ -57,7 +57,7 @@ pipeline {
 
         stage('Run OpenBMC API Tests') {
             steps {
-                sh "${PYTEST} tests/api/ -v"
+                sh "${PYTEST} tests/api/ -v --disable-warnings"
             }
         }
 
