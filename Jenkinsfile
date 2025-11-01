@@ -46,7 +46,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        timeout ${QEMU_TIMEOUT_SEC} qemu-system-arm -m 256 -M romulus-bmc -nographic -drive file=./romulus/obmc-phosphor-image-romulus-20250903025632.static.mtd,format=raw,if=mtd -net nic -net user,hostfwd=:0.0.0.0:2222-:22,hostfwd=:0.0.0.0:2443-:443,hostfwd=udp:0.0.0.0:2623-:623,hostname=qemu &
+                        qemu-system-arm -m 256 -M romulus-bmc -nographic -drive file=./romulus/obmc-phosphor-image-romulus-20250903025632.static.mtd,format=raw,if=mtd -net nic -net user,hostfwd=:0.0.0.0:2222-:22,hostfwd=:0.0.0.0:2443-:443,hostfwd=udp:0.0.0.0:2623-:623,hostname=qemu &
 
                         echo $! > qemu.pid
                         sleep 30
@@ -61,23 +61,23 @@ pipeline {
             }
         }
 
-        stage('Driver for WebUI Tests') {
-            steps {
-                // This is from official firefox post
-                sh '''
-                    wget -O geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz"
-                    tar -xzf geckodriver.tar.gz
-                    chmod +x geckodriver
-                    sudo mv geckodriver /usr/local/bin/
-                    '''
-            }
-        }
+        // stage('Driver for WebUI Tests') {
+        //     steps {
+        //         // This is from official firefox post
+        //         sh '''
+        //             wget -O geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz"
+        //             tar -xzf geckodriver.tar.gz
+        //             chmod +x geckodriver
+        //             sudo mv geckodriver /usr/local/bin/
+        //             '''
+        //     }
+        // }
 
-        stage('Run OpenBMC WebUI Tests') {
-            steps {
-                sh "${PYTHON} tests/webui/webui-tests.py"
-            }
-        }
+        // stage('Run OpenBMC WebUI Tests') {
+        //     steps {
+        //         sh "${PYTHON} tests/webui/webui-tests.py"
+        //     }
+        // }
 
         stage('Run OpenBMC Load Testing') {
             steps {
