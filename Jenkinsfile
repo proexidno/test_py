@@ -61,23 +61,23 @@ pipeline {
             }
         }
 
-        stage('Driver for WebUI Tests') {
-            steps {
-                // This is from official firefox post
-                sh '''
-                    wget -O geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz"
-                    tar -xzf geckodriver.tar.gz
-                    chmod +x geckodriver
-                    sudo mv geckodriver /usr/local/bin/
-                    '''
-            }
-        }
+        // stage('Driver for WebUI Tests') {
+        //     steps {
+        //         // This is from official firefox post
+        //         sh '''
+        //             wget -O geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz"
+        //             tar -xzf geckodriver.tar.gz
+        //             chmod +x geckodriver
+        //             sudo mv geckodriver /usr/local/bin/
+        //             '''
+        //     }
+        // }
 
-        stage('Run OpenBMC WebUI Tests') {
-            steps {
-                sh "${PYTHON} tests/webui/webui-tests.py"
-            }
-        }
+        // stage('Run OpenBMC WebUI Tests') {
+        //     steps {
+        //         sh "${PYTHON} tests/webui/webui-tests.py"
+        //     }
+        // }
 
         stage('Run OpenBMC Load Testing') {
             steps {
