@@ -1,10 +1,6 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.11-slim'
-            args '-u root'
-        }
-    }
+    agent any
+
     stages {
         stage('Install System Dependencies') {
             steps {
