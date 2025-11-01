@@ -13,12 +13,6 @@ pipeline {
         OBMC_PASS=credentials('OBMC_PASS')
         IPMI_USER=credentials('IPMI_USER')
         IPMI_PASS=credentials('IPMI_PASS')
-
-        QEMU_TIMEOUT_SEC = '600'
-
-        REPORTS_DIR = 'reports'
-        PYTEST_REPORT = '${REPORTS_DIR}/pytest.xml'
-        LOCUST_REPORT = '${REPORTS_DIR}/locust'
     }
 
     stages {
@@ -39,7 +33,7 @@ pipeline {
         stage('Setup Python Virtual Environment') {
             steps {
                 sh '''
-                    mkdir -p ${REPORTS_DIR}
+                    mkdir -p reports
                     python3 -m venv ${VENV}
                     ${VENV}/bin/pip install --upgrade pip
                     ${VENV}/bin/pip install -r requirements.txt
@@ -62,11 +56,11 @@ pipeline {
 
         stage('Run OpenBMC API Tests') {
             steps {
-                sh "ls; ${PYTEST} tests/api/ -v --junitxml=${PYTEST_REPORT} --disable-warnings"
+                sh "ls; ${PYTEST} tests/api/ -v --junitxml=./reports/pytest.xml --disable-warnings"
             }
             post {
                 always {
-                    archiveArtifacts artifacts: "${PYTEST_REPORT}", fingerprint: true
+                    archiveArtifacts artifacts: "reports/pytest.xml", fingerprint: true
                 }
             }
         }
@@ -92,20 +86,20 @@ pipeline {
         stage('Run OpenBMC Load Testing') {
             steps {
                 sh """
-                    mkdir -p ${LOCUST_REPORT}
+                    mkdir -p reports/locust
                     ${LOCUST} -f tests/locust/locustfile.py \\
                         --headless \\
                         -u 50 \\
                         -r 2 \\
-                        --html=${LOCUST_REPORT}/report.html \\
-                        --csv=${LOCUST_REPORT}/results \\
+                        --html=./reports/locust/report.html \\
+                        --csv=./reports/locust/results \\
                         --run-time 5m \\
                         --exit-code-on-error 1
                 """
             }
             post {
                 always {
-                    archiveArtifacts artifacts: "${LOCUST_REPORT}/**", fingerprint: true
+                    archiveArtifacts artifacts: "reports/locust/**", fingerprint: true
                 }
             }
         }
