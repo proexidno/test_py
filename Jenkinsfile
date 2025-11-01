@@ -13,7 +13,7 @@ pipeline {
         stage('Install Qemu') {
             steps {
                 sh '''
-                    apt-get install -y --update python3 qemu-system-arch
+                    apt-get install -y --update python3 qemu-utils qemu-system-arm
                 '''
             }
         }
