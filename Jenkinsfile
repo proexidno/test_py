@@ -84,9 +84,9 @@ pipeline {
                 sh """
                     ${LOCUST} -f tests/locust/locustfile.py \\
                         --headless \\
-                        -u 10 \\
+                        -u 50 \\
                         -r 2 \\
-                        --run-time 2m \\
+                        --run-time 5m \\
                         --exit-code-on-error 1
                 """
             }
