@@ -1,6 +1,9 @@
 import os
 from locust import HttpUser, task, between
+import urllib3
 from dotenv import load_dotenv
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 load_dotenv()
 
