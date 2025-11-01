@@ -15,6 +15,10 @@ pipeline {
         IPMI_PASS=credentials('IPMI_PASS')
 
         QEMU_TIMEOUT_SEC = '600'
+
+        REPORTS_DIR = 'reports'
+        PYTEST_REPORT = '${REPORTS_DIR}/pytest.xml'
+        LOCUST_REPORT = '${REPORTS_DIR}/locust'
     }
 
     stages {
@@ -57,7 +61,12 @@ pipeline {
 
         stage('Run OpenBMC API Tests') {
             steps {
-                sh "${PYTEST} tests/api/ -v --disable-warnings"
+                sh "${PYTEST} tests/api/ -v --junitxml=${PYTEST_REPORT} --disable-warnings"
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: "${PYTEST_REPORT}", fingerprint: true
+                }
             }
         }
 
@@ -82,13 +91,21 @@ pipeline {
         stage('Run OpenBMC Load Testing') {
             steps {
                 sh """
+                    mkdir -p ${LOCUST_REPORT}
                     ${LOCUST} -f tests/locust/locustfile.py \\
                         --headless \\
                         -u 50 \\
                         -r 2 \\
+                        --html=${LOCUST_REPORT}/report.html \\
+                        --csv=${LOCUST_REPORT}/results \\
                         --run-time 5m \\
                         --exit-code-on-error 1
                 """
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: "${LOCUST_REPORT}/**", fingerprint: true
+                }
             }
         }
     }
