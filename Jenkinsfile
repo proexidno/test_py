@@ -31,7 +31,7 @@ pipeline {
                 sh '''
                     mkdir -p reports
                     python3 -m venv .venv
-                    source ./.venv/bin/activate
+                    export PATH="$PWD/.venv/bin/:$PATH"
                     pip install --upgrade pip
                     pip install -r requirements.txt
                 '''
