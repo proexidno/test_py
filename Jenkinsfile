@@ -31,8 +31,8 @@ pipeline {
                 sh '''
                     mkdir -p reports
                     python3 -m venv .venv
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
+                    ./.venv/bin/pip install --upgrade pip
+                    ./.venv/bin/pip install -r requirements.txt
                 '''
             }
         }
