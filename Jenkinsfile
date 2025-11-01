@@ -65,10 +65,10 @@ pipeline {
         //     steps {
         //         // This is from official firefox post
         //         sh '''
-        //             wget -O geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz"
+        //             wget -O geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux64.tar.gz"
         //             tar -xzf geckodriver.tar.gz
         //             chmod +x geckodriver
-        //             sudo mv geckodriver /usr/local/bin/
+        //             mv geckodriver /usr/local/bin/
         //             '''
         //     }
         // }
