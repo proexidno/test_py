@@ -62,7 +62,7 @@ pipeline {
 
         stage('Run OpenBMC API Tests') {
             steps {
-                sh "${PYTEST} tests/api/ -v --junitxml=${PYTEST_REPORT} --disable-warnings"
+                sh "ls; ${PYTEST} tests/api/ -v --junitxml=${PYTEST_REPORT} --disable-warnings"
             }
             post {
                 always {
