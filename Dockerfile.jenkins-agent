@@ -1,0 +1,14 @@
+FROM python:3.11-slim
+
+# Install system deps
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        qemu-system-arm \
+        git \
+        openssh-client \
+        procps \
+        curl
+
+WORKDIR /home/jenkins
+
+USER root
