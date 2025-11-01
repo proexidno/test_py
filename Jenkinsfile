@@ -31,7 +31,6 @@ pipeline {
                 sh '''
                     mkdir -p reports
                     python3 -m venv .venv
-                    export PATH="$PWD/.venv/bin/:$PATH"
                     pip install --upgrade pip
                     pip install -r requirements.txt
                 '''
@@ -53,7 +52,7 @@ pipeline {
 
         stage('Run OpenBMC API Tests') {
             steps {
-                sh "pytest tests/api/ -v --junitxml=./reports/pytest.xml --disable-warnings"
+                sh "./.venv/bin/pytest tests/api/ -v --junitxml=./reports/pytest.xml --disable-warnings"
             }
             post {
                 always {
@@ -76,7 +75,7 @@ pipeline {
 
         // stage('Run OpenBMC WebUI Tests') {
         //     steps {
-        //         sh "python tests/webui/webui-tests.py"
+        //         sh "./.venv/bin/python tests/webui/webui-tests.py"
         //     }
         // }
 
@@ -84,7 +83,7 @@ pipeline {
             steps {
                 sh """
                     mkdir -p reports/locust
-                    locust -f tests/locust/locustfile.py \\
+                    ./.venv/bin/locust -f tests/locust/locustfile.py \\
                         --headless \\
                         -u 50 \\
                         -r 2 \\
