@@ -13,7 +13,7 @@ pipeline {
         stage('Install Qemu') {
             steps {
                 sh '''
-                    apt-get install -y --update python3 qemu-utils qemu-system-arm
+                    apt-get install -y --update python3 qemu-utils qemu-system-arm python3.13-venv
                 '''
             }
         }
@@ -54,6 +54,18 @@ pipeline {
         stage('Run OpenBMC API Tests') {
             steps {
                 sh "${PYTEST} tests/api/ -v"
+            }
+        }
+
+        stage('Driver for WebUI Tests') {
+            steps {
+                // This is from official firefox post
+                sh '''
+                    wget -O geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz"
+                    tar -xzf geckodriver.tar.gz
+                    chmod +x geckodriver
+                    sudo mv geckodriver /usr/local/bin/
+                    '''
             }
         }
 
