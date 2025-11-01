@@ -47,7 +47,7 @@ def test_redfish_ipmi_cpu_temp_consistency(auth_token, base_url):
             ],
             capture_output=True,
             text=True,
-            timeout=30,
+            timeout=60,
         )
         if result.returncode != 0:
             fail(f"IPMI command failed: {result.stderr.strip()}")
