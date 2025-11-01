@@ -6,6 +6,14 @@ pipeline {
         PYTHON = '${VENV}/bin/python'
         PYTEST = '${VENV}/bin/pytest'
         LOCUST = '${VENV}/bin/locust'
+        OBMC_HOST='https://127.0.0.1:2443'
+        IPMI_HOST='127.0.0.1'
+        IPMI_PORT='2623'
+        OBMC_USER=credentials('OBMC_USER')
+        OBMC_PASS=credentials('OBMC_PASS')
+        IPMI_USER=credentials('IPMI_USER')
+        IPMI_PASS=credentials('IPMI_PASS')
+
         QEMU_TIMEOUT_SEC = '600'
     }
 
@@ -27,14 +35,9 @@ pipeline {
         stage('Setup Python Virtual Environment') {
             steps {
                 sh '''
-                    if [ ! -d "${VENV}" ]; then
-                        echo "Virtual environment not found. Creating..."
-                        python3 -m venv ${VENV}
-                        ${VENV}/bin/pip install --upgrade pip
-                        ${VENV}/bin/pip install -r requirements.txt
-                    else
-                        echo "Using existing virtual environment: ${VENV}"
-                    fi
+                    python3 -m venv ${VENV}
+                    ${VENV}/bin/pip install --upgrade pip
+                    ${VENV}/bin/pip install -r requirements.txt
                 '''
             }
         }

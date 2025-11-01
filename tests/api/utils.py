@@ -9,7 +9,7 @@ def get_base_url():
     host = os.getenv("OBMC_HOST")
     if not host:
         raise ValueError("OBMC_HOST not set in .env")
-    return f"https://{host}"
+    return f"{host}"
 
 
 def get_ipmi_base_url():
@@ -27,18 +27,18 @@ def get_ipmi_port():
 
 
 def get_credentials():
-    username = os.getenv("OBMC_USERNAME")
-    password = os.getenv("OBMC_PASSWORD")
+    username = os.getenv("OBMC_USER")
+    password = os.getenv("OBMC_PASS")
     if not username or not password:
-        raise ValueError("OBMC_USERNAME or OBMC_PASSWORD not set in .env")
+        raise ValueError("OBMC_USER or OBMC_PASS not set in .env")
     return username, password
 
 
 def get_ipmi_credentials():
-    username = os.getenv("IPMI_USERNAME")
-    password = os.getenv("IPMI_PASSWORD")
+    username = os.getenv("IPMI_USER")
+    password = os.getenv("IPMI_PASS")
     if not username or not password:
-        raise ValueError("IPMI_USERNAME or IPMI_PASSWORD not set in .env")
+        raise ValueError("IPMI_USER or IPMI_PASS not set in .env")
     return username, password
 
 
