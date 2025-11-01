@@ -1,0 +1,10 @@
+services:
+  jenkins:
+    user: 1000:1000
+    image: jenkins/jenkins:lts-jdk21
+    container_name: jenkins
+    ports:
+      - 8080:8080
+    volumes:
+      - ../jenkins-config:/var/jenkins_home
+    restart: unless-stopped
